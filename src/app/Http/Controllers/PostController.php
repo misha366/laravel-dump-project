@@ -2,63 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\PostDTO;
+use App\Http\Requests\Post\IndexRequest;
+use App\Http\Requests\Post\StoreRequest;
+use App\Http\Requests\Post\UpdateRequest;
+use App\Models\Post;
+use App\Services\CategoryService;
+use App\Services\PostService;
+use App\Services\TagService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return "index";
+    private PostService $postService;
+    private CategoryService $categoryService;
+    private TagService $tagService;
+
+    public function __construct(
+        PostService $postService,
+        CategoryService $categoryService,
+        TagService $tagService
+    ) {
+        $this->postService = $postService;
+        $this->categoryService = $categoryService;
+        $this->tagService = $tagService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(IndexRequest $request): void
     {
-        return "create";
+        $params = $request->validated();
+
+        $posts = $this->postService->getPaginatedAndFilteredPosts(
+            $params['is_published'] ?? null,
+            $params['category_id'] ?? null
+        );
+        $categories = $this->categoryService->getCategories();
+
+        dump([
+            'posts' => $posts,
+            'categories' => $categories
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function create(): void
     {
-        return "store";
+        $categories = $this->categoryService->getCategories();
+        $tags = $this->tagService->getTags();
+
+        dump([
+            'categories' => $categories,
+            'tags' => $tags
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function store(StoreRequest $request): void
     {
-        return "show";
+        $postDTO = PostDTO::fromArray($request->validated());
+        $post = $this->postService->store($postDTO);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function show(Post $post): void
     {
-        return "edit";
+        dump([
+            'post' => $post
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function edit(Post $post): void
     {
-        return "update";
+        $categories = $this->categoryService->getCategories();
+        $tags = $this->tagService->getTags();
+
+        dump([
+            'categories' => $categories,
+            'tags' => $tags
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function update(UpdateRequest $request, Post $post): void
     {
-        return "destroy";
+        $postDTO = PostDTO::fromArray($request->validated());
+        $this->postService->update($postDTO, $post);
+    }
+
+    public function destroy(Post $post): void
+    {
+        $this->postService->destroy($post);
     }
 }
