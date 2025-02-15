@@ -52,6 +52,12 @@ return [
     */
 
     'channels' => [
+        'post' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/posts.log'),
+            'level' => 'error',
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
