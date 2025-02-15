@@ -2,6 +2,8 @@
 
 namespace App\Repository\Tag;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface TagRepositoryInterface {
-    public function getTags(): array;
+    public function getTags(): Collection;
 }
