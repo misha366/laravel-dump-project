@@ -10,7 +10,7 @@ use App\Models\Post;
 use App\Services\CategoryService;
 use App\Services\PostService;
 use App\Services\TagService;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
@@ -28,7 +28,7 @@ class PostController extends Controller
         $this->tagService = $tagService;
     }
 
-    public function index(IndexRequest $request): void
+    public function index(IndexRequest $request): View
     {
         $params = $request->validated();
 
@@ -38,10 +38,11 @@ class PostController extends Controller
         );
         $categories = $this->categoryService->getCategories();
 
-        dump([
-            'posts' => $posts,
-            'categories' => $categories
-        ]);
+        // dump([
+        //     'posts' => $posts,
+        //     'categories' => $categories
+        // ]);
+        return view('post/index');
     }
 
     public function create(): void
