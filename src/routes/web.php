@@ -13,4 +13,5 @@ Route::resource('posts', PostController::class);
 // Temp auth routes
 Route::group(['prefix' => 'auth'], function () {
     Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::get('/profile', [AuthController::class, 'profile'])->name('auth.profile');
 });
