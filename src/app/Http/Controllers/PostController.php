@@ -61,9 +61,9 @@ class PostController extends Controller
         $post = $this->postService->store($postDTO);
     }
 
-    public function show(Post $post): void
+    public function show(Post $post): View
     {
-        dump([
+        return view('post/show', [
             'post' => $post
         ]);
     }
