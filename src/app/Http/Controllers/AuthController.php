@@ -16,6 +16,11 @@ class AuthController extends Controller
         return view('auth/register');
     }
 
+    public function confirmPassword(): View
+    {
+        return view('auth/confirm-password');
+    }
+
     public function profile(): View
     {
         return view('auth/profile');
