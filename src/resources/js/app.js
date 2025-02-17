@@ -3,6 +3,10 @@ import './bootstrap';
 import '../css/import.bootstrap.css';
 import 'bootstrap';
 
+// bootstrap icons
+// npm install bootstrap-icons
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import '../css/style.css';
 
 // preloader

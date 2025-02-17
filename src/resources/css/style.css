@@ -85,11 +85,18 @@ nav ul li a:hover {
 
 .post__link-edit {
     margin-left: 10px;
+    text-decoration: none;
 }
 
-.post__link-edit img {
-    height: 15px;
-    width: 15px;
+.post__link-edit i {
+    display: flex;
+    align-items: center;
+}
+
+.post__link-edit i::before {
+    font-size: 1.2rem;
+    display: inline-block;
+    color: black;
 }
 
 .post__link-trash {
