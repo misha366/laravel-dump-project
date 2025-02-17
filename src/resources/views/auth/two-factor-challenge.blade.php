@@ -48,4 +48,5 @@
             </div>
         </div>
     </div>
+    @vite(['resources/js/two-factor-challenge-toggler.js'])
 @endsection

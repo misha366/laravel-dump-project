@@ -4,3 +4,4 @@
     <div class="spinner-border text-primary" role="status">
     </div>
 </div>
+@vite(['resources/js/preloader.js'])
