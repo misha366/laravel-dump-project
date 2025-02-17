@@ -73,21 +73,26 @@ class PostController extends Controller
         ]);
     }
 
-    public function edit(Post $post): void
+    public function edit(Post $post): View
     {
         $categories = $this->categoryService->getCategories();
         $tags = $this->tagService->getTags();
 
-        dump([
+        return view('post/edit', [
+            'post' => $post,
             'categories' => $categories,
             'tags' => $tags
         ]);
     }
 
-    public function update(UpdateRequest $request, Post $post): void
+    public function update(UpdateRequest $request, Post $post): RedirectResponse
     {
         $postDTO = PostDTO::fromArray($request->validated());
         $this->postService->update($postDTO, $post);
+
+        return redirect()->route('posts.show', [
+            'post' => $post->id
+        ]);
     }
 
     public function destroy(Post $post): void
