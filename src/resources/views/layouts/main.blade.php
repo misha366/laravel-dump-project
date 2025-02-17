@@ -16,9 +16,13 @@
 <body class="pb-3">
 
 <div style="display: none" class="container page">
+    <x-common.topmenu></x-common.topmenu>
+    <x-common.authoffcanvas></x-common.authoffcanvas>
     @yield('content')
+    <x-common.addpostbutton></x-common.addpostbutton>
 </div>
 
+<x-common.preloader></x-common.preloader>
 
 @vite(['resources/js/app.js'])
 </body>
