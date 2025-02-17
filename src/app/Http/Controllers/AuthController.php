@@ -36,6 +36,11 @@ class AuthController extends Controller
         return view('auth/two-factor-challenge');
     }
 
+    public function verifyEmail(): View
+    {
+        return view('auth/verify-email');
+    }
+
     public function profile(): View
     {
         return view('auth/profile');

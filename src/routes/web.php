@@ -18,5 +18,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot-password');
     Route::get('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset-password');
     Route::get('/two-factor-challenge', [AuthController::class, 'twoFactorChallenge'])->name('auth.two-factor-challenge');
+    Route::get('/verify-email', [AuthController::class, 'verifyEmail'])->name('auth.verify-email');
     Route::get('/profile', [AuthController::class, 'profile'])->name('auth.profile');
 });
