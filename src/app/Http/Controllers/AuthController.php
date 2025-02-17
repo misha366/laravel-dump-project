@@ -6,8 +6,8 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function login(): string
+    public function login(): View
     {
-        return "view('auth/login')";
+        return view('auth/login');
     }
 }
