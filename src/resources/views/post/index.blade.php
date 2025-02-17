@@ -24,6 +24,7 @@
             </a>
             <form class="post__link-form" action="{{ route("posts.destroy", ["post" => $post->id]) }}"
                     method="POST">
+                @csrf
                 @method("delete")
                 <button type="submit" class="post__link-trash btn btn-danger">
                     <i class="bi bi-trash"></i>

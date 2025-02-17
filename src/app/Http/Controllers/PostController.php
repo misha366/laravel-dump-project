@@ -95,8 +95,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function destroy(Post $post): void
+    public function destroy(Post $post): RedirectResponse
     {
         $this->postService->destroy($post);
+        return redirect()->route('posts.index');
     }
 }
