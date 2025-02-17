@@ -46,4 +46,5 @@
         </div>
     </div>
 </div>
+<x-common.addpostbutton></x-common.addpostbutton>
 @endsection

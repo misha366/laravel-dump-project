@@ -14,7 +14,6 @@
     <x-common.topmenu></x-common.topmenu>
     <x-common.authoffcanvas></x-common.authoffcanvas>
     @yield('content')
-    <x-common.addpostbutton></x-common.addpostbutton>
 </div>
 
 <x-common.preloader></x-common.preloader>

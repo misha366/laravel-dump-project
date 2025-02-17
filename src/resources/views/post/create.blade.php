@@ -3,12 +3,6 @@
 @section('title', 'Create Post - Posts site')
 
 @section('content')
-    <style>
-        .float {
-            display: none;
-        }
-    </style>
-
     <x-errors.error-messages
         errTitle="Error Post"
         errSubtitle="Validation Error"
