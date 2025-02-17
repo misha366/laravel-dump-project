@@ -38,11 +38,10 @@ class PostController extends Controller
         );
         $categories = $this->categoryService->getCategories();
 
-        // dump([
-        //     'posts' => $posts,
-        //     'categories' => $categories
-        // ]);
-        return view('post/index');
+        return view('post/index', [
+            'posts' => $posts,
+            'categories' => $categories
+        ]);
     }
 
     public function create(): void
