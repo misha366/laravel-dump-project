@@ -21,6 +21,11 @@ class AuthController extends Controller
         return view('auth/confirm-password');
     }
 
+    public function forgotPassword(): View
+    {
+        return view('auth/forgot-password');
+    }
+
     public function profile(): View
     {
         return view('auth/profile');
