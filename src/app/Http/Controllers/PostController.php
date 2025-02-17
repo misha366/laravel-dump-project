@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Services\CategoryService;
 use App\Services\PostService;
 use App\Services\TagService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -44,21 +45,25 @@ class PostController extends Controller
         ]);
     }
 
-    public function create(): void
+    public function create(): View
     {
         $categories = $this->categoryService->getCategories();
         $tags = $this->tagService->getTags();
 
-        dump([
+        return view('post/create', [
             'categories' => $categories,
             'tags' => $tags
         ]);
     }
 
-    public function store(StoreRequest $request): void
+    public function store(StoreRequest $request): RedirectResponse
     {
         $postDTO = PostDTO::fromArray($request->validated());
         $post = $this->postService->store($postDTO);
+
+        return redirect()->route('posts.show', [
+            'post' => $post
+        ]);
     }
 
     public function show(Post $post): View
