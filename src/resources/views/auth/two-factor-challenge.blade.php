@@ -1,5 +1,8 @@
-@extends("layouts.auth")
-@section("content")
+@extends('layouts.auth')
+
+@section('title', 'Two Factor Challenge - Posts site')
+
+@section('content')
     <x-errors.error-messages
         errTitle="Two-Factor Authentication"
         errSubtitle="Please confirm access to your account"
