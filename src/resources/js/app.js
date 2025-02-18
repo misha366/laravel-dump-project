@@ -7,7 +7,7 @@ import 'bootstrap';
 // npm install bootstrap-icons
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-import '../css/style.css';
+import '../css/setfont.css';
 
 // Remove empty parameters from url
 function removeEmptyGetParams() {

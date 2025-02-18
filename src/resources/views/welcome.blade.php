@@ -17,5 +17,6 @@
     <div id="tsparticles"></div>
 
     @vite(['resources/js/homepage-particles.js'])
+    @vite(['resources/js/app.js'])
 </body>
 </html>

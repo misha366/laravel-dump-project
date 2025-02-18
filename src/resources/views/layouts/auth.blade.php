@@ -27,7 +27,8 @@
 
 <x-common.preloader></x-common.preloader>
 
-@vite(['resources/js/app.js'])
 
+    @vite(['resources/js/app.js'])
+    @vite(['resources/css/style.css'])
 </body>
 </html>
