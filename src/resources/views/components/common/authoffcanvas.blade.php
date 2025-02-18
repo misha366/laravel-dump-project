@@ -27,7 +27,7 @@
             </div>
         </div>
         <ul class="list-group mb-3">
-            <li class="list-group-item"><a class="offcanvas__auth-link" href="#"><i class="bi bi-house-door me-2"></i> Home</a></li>
+            <li class="list-group-item"><a class="offcanvas__auth-link" href="{{ route("mainpage") }}"><i class="bi bi-house-door me-2"></i> Home</a></li>
             <li class="list-group-item"><a class="offcanvas__auth-link" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
             <li class="list-group-item">
                 <form method="POST" action="#">
