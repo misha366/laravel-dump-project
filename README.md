@@ -34,6 +34,15 @@ Dump Laravel project with implemented CRUD and ui, on which you can test differe
 
 </details>
 
+### Technologies
+Frontend:
+"dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@tsparticles/all": "^3.8.1",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3"
+}
+
 ### Models & Seeders
 ```php
 Post {
