@@ -63,11 +63,19 @@ nav ul li a:hover {
 
 .post__title {
     display: flex;
+}
+
+.post__title a {
+    flex-grow: 1;
+}
+
+.post__title-actions {
+    display: flex;
     align-items: center;
 }
 
 .post__link-edit {
-    margin-left: 10px;
+    margin-right: 10px;
     text-decoration: none;
 }
 
@@ -146,6 +154,10 @@ nav ul li a:hover {
 .menu__button-admin:hover {
     background: var(--bs-danger);
     transform: translateX(-38%) rotate(90deg);
+}
+
+.menu__button-admin, .menu__button-user, .menu__line {
+    z-index: 99;
 }
 
 .offcanvas__profile-photo {

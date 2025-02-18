@@ -17,19 +17,21 @@
     @foreach($posts as $post)
         <h3 class="post__title">
             <a href="{{ route("posts.show", ["post" => $post->id]) }}">
-                #{{ $post->id }} {{ $post->title }}
+                #{{ $post->id }} {{ Str::limit($post->title, 50) }}
             </a>
-            <a href="{{ route("posts.edit", ["post" => $post->id]) }}" class="post__link-edit">
-                <i class="bi bi-pencil-square"></i>
-            </a>
-            <form class="post__link-form" action="{{ route("posts.destroy", ["post" => $post->id]) }}"
-                    method="POST">
-                @csrf
-                @method("delete")
-                <button type="submit" class="post__link-trash btn btn-danger">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </form>
+            <div class="post__title-actions">
+                <a href="{{ route("posts.edit", ["post" => $post->id]) }}" class="post__link-edit">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <form class="post__link-form" action="{{ route("posts.destroy", ["post" => $post->id]) }}"
+                        method="POST">
+                    @csrf
+                    @method("delete")
+                    <button type="submit" class="post__link-trash btn btn-danger">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
         </h3>
         <div class="mb-2">
             <i class="badge text-bg-primary text-wrap">
@@ -42,7 +44,7 @@
                         implode(", ", $post->tags->pluck("title")->toArray()) }}
             </i>
         </div>
-        <div class="mb-4">{{ $post->content }}</div>
+        <div class="mb-4">{{ Str::limit($post->content, 140) }}</div>
         <hr>
     @endforeach
     <div class="navigation">
