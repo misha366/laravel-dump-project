@@ -23,4 +23,11 @@ class Post extends Model
             'tag_id'
         );
     }
+
+    protected $fillable = [
+        'title',
+        'content',
+        'image',
+        'category_id'
+    ];
 }

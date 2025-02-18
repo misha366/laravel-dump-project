@@ -10,7 +10,8 @@ use App\Models\Post;
 use App\Services\CategoryService;
 use App\Services\PostService;
 use App\Services\TagService;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
@@ -28,7 +29,7 @@ class PostController extends Controller
         $this->tagService = $tagService;
     }
 
-    public function index(IndexRequest $request): void
+    public function index(IndexRequest $request): View
     {
         $params = $request->validated();
 
@@ -38,55 +39,65 @@ class PostController extends Controller
         );
         $categories = $this->categoryService->getCategories();
 
-        dump([
+        return view('post/index', [
             'posts' => $posts,
             'categories' => $categories
         ]);
     }
 
-    public function create(): void
+    public function create(): View
     {
         $categories = $this->categoryService->getCategories();
         $tags = $this->tagService->getTags();
 
-        dump([
+        return view('post/create', [
             'categories' => $categories,
             'tags' => $tags
         ]);
     }
 
-    public function store(StoreRequest $request): void
+    public function store(StoreRequest $request): RedirectResponse
     {
         $postDTO = PostDTO::fromArray($request->validated());
         $post = $this->postService->store($postDTO);
-    }
 
-    public function show(Post $post): void
-    {
-        dump([
+        return redirect()->route('posts.show', [
             'post' => $post
         ]);
     }
 
-    public function edit(Post $post): void
+    public function show(Post $post): View
+    {
+        return view('post/show', [
+            'post' => $post
+        ]);
+    }
+
+    public function edit(Post $post): View
     {
         $categories = $this->categoryService->getCategories();
         $tags = $this->tagService->getTags();
 
-        dump([
+        return view('post/edit', [
+            'post' => $post,
             'categories' => $categories,
             'tags' => $tags
         ]);
     }
 
-    public function update(UpdateRequest $request, Post $post): void
+    public function update(UpdateRequest $request, Post $post): RedirectResponse
     {
         $postDTO = PostDTO::fromArray($request->validated());
         $this->postService->update($postDTO, $post);
+
+        return redirect()->route('posts.show', [
+            'post' => $post->id
+        ]);
     }
 
-    public function destroy(Post $post): void
+    public function destroy(Post $post): RedirectResponse
     {
         $this->postService->destroy($post);
+        return redirect()->route('posts.index');
     }
 }
