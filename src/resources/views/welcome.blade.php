@@ -8,13 +8,18 @@
 </head>
 <body>
 
-    <div class="mainpage">
-        <h1 class="mainpage__title">Laravel Dump Project</h1>
-        <div class="mainpage__description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi, commodi!</div>
-        <a href="{{ route("posts.index") }}" class="btn btn-primary">Explore <i class="bi bi-rocket-takeoff"></i></a>
+    <div style="display: none" class="page">
+        <div class="mainpage">
+            <h1 class="mainpage__title">Laravel Dump Project</h1>
+            <div class="mainpage__description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi, commodi!</div>
+            <a href="{{ route("posts.index") }}" class="btn btn-primary">Explore <i class="bi bi-rocket-takeoff"></i></a>
+        </div>
+
+        <div id="tsparticles"></div>
+
     </div>
 
-    <div id="tsparticles"></div>
+    <x-common.preloader></x-common.preloader>
 
     @vite(['resources/js/homepage-particles.js'])
     @vite(['resources/js/app.js'])
