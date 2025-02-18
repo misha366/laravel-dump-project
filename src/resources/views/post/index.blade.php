@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Posts - Posts site')
+@section('title', 'Posts - Laravel Dump Project')
 
 @section('content')
 <div class="container mt-4">

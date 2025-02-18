@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Reset Passwrod - Posts site')
+@section('title', 'Reset Passwrod - Laravel Dump Project')
 
 @section('content')
     <x-errors.error-messages

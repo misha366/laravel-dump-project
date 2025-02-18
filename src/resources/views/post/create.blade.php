@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Create Post - Posts site')
+@section('title', 'Create Post - Laravel Dump Project')
 
 @section('content')
     <x-errors.error-messages

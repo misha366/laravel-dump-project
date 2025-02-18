@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Confirm Password - Posts site')
+@section('title', 'Confirm Password - Laravel Dump Project')
 
 @section('content')
     <x-errors.error-messages

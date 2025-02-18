@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Profile - Posts site')
+@section('title', 'Profile - Laravel Dump Project')
 
 @section("content")
     <div class="container mt-5">

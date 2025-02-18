@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Two Factor Challenge - Posts site')
+@section('title', 'Two Factor Challenge - Laravel Dump Project')
 
 @section('content')
     <x-errors.error-messages
