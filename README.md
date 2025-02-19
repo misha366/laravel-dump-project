@@ -5,15 +5,15 @@ Dump Laravel project with implemented CRUD and ui, on which you can test differe
 ### How to strat?
 1. Clone the repository `> git clone https://github.com/misha366/laravel-dump-project`
 
-2. Build containers `> docker-compose build`
+2. Create & fill `env/mysql.env` & `src/.env` files 
 
-3. Open mysql container bash (`> docker-compose exec mysql sh`)
+3. Build containers `> docker-compose build`
+
+4. Open mysql container bash (`> docker-compose exec mysql sh`)
 
     \-> open mysql util (`> mysql -uusername -ppassword`)
     
     \-> create a database for the project (`mysql> CREATE DATABASE your_database;`)
-
-4. Create & fill `env/mysql.env` & `src/.env` files 
 
 5. Make migrations `> docker-compose run --rm artisan migrate`
 
