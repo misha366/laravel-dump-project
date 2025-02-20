@@ -1,0 +1,45 @@
+name: Deploy Laravel Dump project
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Log in to GitHub CLI
+        run: |
+          echo "${{ secrets.TOKEN }}" | gh auth login --with-token
+
+      - name: Get Codespace name
+        run: |
+          echo "${{ secrets.CODESPACE_NAME }}" >> $GITHUB_ENV
+
+      - name: Set up Docker
+        run: docker-compose down
+
+      - name: Install PHP dependencies
+        run: docker-compose run --rm composer install --no-dev --optimize-autoloader
+
+      - name: Run migrations
+        run: docker-compose run --rm artisan migrate --force
+
+      - name: Cache configuration
+        run: |
+          docker-compose run --rm artisan config:clear
+          docker-compose run --rm artisan config:cache
+          docker-compose run --rm artisan route:cache
+          docker-compose run --rm artisan event:cache
+          docker-compose run --rm artisan view:cache
+
+      - name: Install JS dependencies & build assets
+        run: docker-compose exec php sh -c "npm i && npm run build"
+
+      - name: Start containers
+        run: docker-compose up -d --build
