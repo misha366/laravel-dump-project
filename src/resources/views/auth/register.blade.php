@@ -13,7 +13,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white text-center">
-                        <h4>Registration</h4>
+                        <h4>Registration Page</h4>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="#">
