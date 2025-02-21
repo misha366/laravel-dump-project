@@ -12,17 +12,28 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
+
       - name: Log in to GitHub CLI
         run: |
           echo "${{ secrets.TOKEN }}" | gh auth login --with-token
 
-      - name: Get Codespace name
+      - name: Connect via SSH
         run: |
-          echo "${{ secrets.CODESPACE_NAME }}" >> $GITHUB_ENV
+          gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }}
 
-      - name: Set up Docker
+      - name: Down Docker
         run: docker-compose down
+
+      # ! нужно только если идёт деплой на отдельную ветку
+      - name: Pull commits to deploy branch
+        run: | 
+          git pull --all
+          git checkout deploy
+          git rebase master
+          git push origin deploy --force
+
+      - name: Start containers
+        run: docker-compose up -d --build
 
       - name: Install PHP dependencies
         run: docker-compose run --rm composer install --no-dev --optimize-autoloader
@@ -40,6 +51,3 @@ jobs:
 
       - name: Install JS dependencies & build assets
         run: docker-compose exec php sh -c "npm i && npm run build"
-
-      - name: Start containers
-        run: docker-compose up -d --build
