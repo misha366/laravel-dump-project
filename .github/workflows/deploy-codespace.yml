@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
 
       - name: Log in to GitHub CLI
         run: |
@@ -25,7 +22,7 @@ jobs:
           gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }}
 
       - name: Down Docker
-        run: docker-compose down
+        run: /usr/local/bin/docker-compose down
 
       # ! нужно только если идёт деплой на отдельную ветку
       - name: Pull commits to deploy branch
