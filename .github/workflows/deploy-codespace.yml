@@ -22,7 +22,7 @@ jobs:
           gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }}
 
       - name: CD Debug
-        run: pwd
+        run: ls -lah /home/runner/work/laravel-dump-project/laravel-dump-project && /home/runner/work/laravel-dump-project/
 
       - name: Down Docker
         run: docker compose down
