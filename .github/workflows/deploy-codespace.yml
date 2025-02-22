@@ -12,49 +12,77 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        
-      - name: Change directory  
-        run: |
-          cd /home/runner/work/laravel-dump-project/laravel-dump-project/
 
       - name: Log in to GitHub CLI
         run: |
           echo "${{ secrets.TOKEN }}" | gh auth login --with-token
 
-      - name: Connect via SSH
+      - name: Connect via SSH and execute all tasks
         run: |
-          gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }}
-
-      - name: Debug task
-        run: ls -la /home/runner/work/laravel-dump-project/laravel-dump-project/ && ls -la /home/runner/work/laravel-dump-project/
-
-      - name: Down Docker
-        run: docker compose down
-
-      # ! нужно только если идёт деплой на отдельную ветку
-      - name: Pull commits to deploy branch
-        run: | 
+          gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }} -- '
+          
+          # Down Docker
+          docker compose down
+          
+          # ! Нужно только если идёт деплой на отдельную ветку
+          # Обновляем код и переключаемся на ветку deploy
           git pull --all
           git checkout deploy
           git rebase master
           git push origin deploy --force
-
-      - name: Start containers
-        run: docker compose up -d --build
-
-      - name: Install PHP dependencies
-        run: docker compose run --rm composer install --no-dev --optimize-autoloader
-
-      - name: Run migrations
-        run: docker compose run --rm artisan migrate --force
-
-      - name: Cache configuration
-        run: |
+      
+          # Start containers
+          docker compose up -d --build
+      
+          # Install PHP dependencies
+          docker compose run --rm composer install --no-dev --optimize-autoloader
+      
+          # Run migrations
+          docker compose run --rm artisan migrate --force
+      
+          # Cache configuration
           docker compose run --rm artisan config:clear
           docker compose run --rm artisan config:cache
           docker compose run --rm artisan route:cache
           docker compose run --rm artisan event:cache
           docker compose run --rm artisan view:cache
+      
+          # Install JS dependencies & build assets
+          docker compose exec php sh -c "npm i && npm run build"
+      
+          '
+          
+      # - name: Connect via SSH
+      #   run: |
+      #     gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }} -t
 
-      - name: Install JS dependencies & build assets
-        run: docker compose exec php sh -c "npm i && npm run build"
+      # - name: 
+      #   run: docker compose down
+
+      # # ! нужно только если идёт деплой на отдельную ветку
+      # - name: Pull commits to deploy branch
+      #   run: | 
+      #     git pull --all
+      #     git checkout deploy
+      #     git rebase master
+      #     git push origin deploy --force
+
+      # - name: 
+      #   run: docker compose up -d --build
+
+      # - name: 
+      #   run: docker compose run --rm composer install --no-dev --optimize-autoloader
+
+      # - name: 
+      #   run: docker compose run --rm artisan migrate --force
+
+      # - name: 
+      #   run: |
+      #     docker compose run --rm artisan config:clear
+      #     docker compose run --rm artisan config:cache
+      #     docker compose run --rm artisan route:cache
+      #     docker compose run --rm artisan event:cache
+      #     docker compose run --rm artisan view:cache
+
+      # - name: 
+      #   run: docker compose exec php sh -c "npm i && npm run build"
