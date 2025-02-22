@@ -12,8 +12,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          path: /home/runner/work/laravel-dump-project
+        
+      - name: Change directory  
+        run: |
+          cd /home/runner/work/laravel-dump-project/laravel-dump-project/
 
       - name: Log in to GitHub CLI
         run: |
@@ -23,8 +25,8 @@ jobs:
         run: |
           gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }}
 
-      - name: Change dir
-        run: cd /home/runner/work/laravel-dump-project/ && ls -lah /home/runner/work/laravel-dump-project/
+      - name: Debug task
+        run: ls -la /home/runner/work/laravel-dump-project/ && ls -la /home/runner/work/laravel-dump-project/
 
       - name: Down Docker
         run: docker compose down
