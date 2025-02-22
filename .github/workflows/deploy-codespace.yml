@@ -31,7 +31,7 @@ jobs:
           git pull origin master
           git checkout deploy
           git rebase master
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/misha366/laravel-dump-project.git deploy --force
+          git push https://${{ secrets.TOKEN }}@github.com/misha366/laravel-dump-project.git deploy --force
       
           # Start containers
           docker compose up -d --build
