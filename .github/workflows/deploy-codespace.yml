@@ -19,13 +19,6 @@ jobs:
 
       - name: Connect via SSH and execute all tasks
         run: |
-          gh cs ssh --codespace fictional-carnival-pjgvq97r9w66c7jgp -- '
-          
-          ls -la
-          '
-
-      - name: Connect via SSH and execute all tasks
-        run: |
           gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }} -- '
           
           cd /workspaces/laravel-dump-project/
@@ -35,7 +28,10 @@ jobs:
           
           # ! Нужно только если идёт деплой на отдельную ветку
           # Обновляем код и переключаемся на ветку deploy
-          git pull --all
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git pull origin master
           git checkout deploy
           git rebase master
           git push origin deploy --force
@@ -60,38 +56,3 @@ jobs:
           docker compose exec php sh -c "npm i && npm run build"
       
           '
-          
-      # - name: Connect via SSH
-      #   run: |
-      #     gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }} -t
-
-      # - name: 
-      #   run: docker compose down
-
-      # # ! нужно только если идёт деплой на отдельную ветку
-      # - name: Pull commits to deploy branch
-      #   run: | 
-      #     git pull --all
-      #     git checkout deploy
-      #     git rebase master
-      #     git push origin deploy --force
-
-      # - name: 
-      #   run: docker compose up -d --build
-
-      # - name: 
-      #   run: docker compose run --rm composer install --no-dev --optimize-autoloader
-
-      # - name: 
-      #   run: docker compose run --rm artisan migrate --force
-
-      # - name: 
-      #   run: |
-      #     docker compose run --rm artisan config:clear
-      #     docker compose run --rm artisan config:cache
-      #     docker compose run --rm artisan route:cache
-      #     docker compose run --rm artisan event:cache
-      #     docker compose run --rm artisan view:cache
-
-      # - name: 
-      #   run: docker compose exec php sh -c "npm i && npm run build"
