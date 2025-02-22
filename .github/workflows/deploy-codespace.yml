@@ -19,8 +19,17 @@ jobs:
 
       - name: Connect via SSH and execute all tasks
         run: |
+          gh cs ssh --codespace fictional-carnival-pjgvq97r9w66c7jgp -- '
+          
+          ls -la
+          '
+
+      - name: Connect via SSH and execute all tasks
+        run: |
           gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }} -- '
           
+          cd /workspaces/laravel-dump-project/
+
           # Down Docker
           docker compose down
           
