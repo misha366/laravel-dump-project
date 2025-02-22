@@ -22,7 +22,7 @@ jobs:
           gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }}
 
       - name: Down Docker
-        run: /usr/local/bin/docker-compose down
+        run: docker compose down
 
       # ! нужно только если идёт деплой на отдельную ветку
       - name: Pull commits to deploy branch
@@ -33,21 +33,21 @@ jobs:
           git push origin deploy --force
 
       - name: Start containers
-        run: docker-compose up -d --build
+        run: docker compose up -d --build
 
       - name: Install PHP dependencies
-        run: docker-compose run --rm composer install --no-dev --optimize-autoloader
+        run: docker compose run --rm composer install --no-dev --optimize-autoloader
 
       - name: Run migrations
-        run: docker-compose run --rm artisan migrate --force
+        run: docker compose run --rm artisan migrate --force
 
       - name: Cache configuration
         run: |
-          docker-compose run --rm artisan config:clear
-          docker-compose run --rm artisan config:cache
-          docker-compose run --rm artisan route:cache
-          docker-compose run --rm artisan event:cache
-          docker-compose run --rm artisan view:cache
+          docker compose run --rm artisan config:clear
+          docker compose run --rm artisan config:cache
+          docker compose run --rm artisan route:cache
+          docker compose run --rm artisan event:cache
+          docker compose run --rm artisan view:cache
 
       - name: Install JS dependencies & build assets
-        run: docker-compose exec php sh -c "npm i && npm run build"
+        run: docker compose exec php sh -c "npm i && npm run build"
