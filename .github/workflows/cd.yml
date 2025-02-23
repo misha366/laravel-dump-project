@@ -1,0 +1,55 @@
+name: Autodeploy Laravel Dump project
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log in to GitHub CLI
+        run: |
+          echo "${{ secrets.TOKEN }}" | gh auth login --with-token
+
+      - name: Connect via SSH and execute all tasks
+        run: |
+          gh cs ssh --codespace ${{ secrets.CODESPACE_NAME }} -- '
+          
+          cd /workspaces/laravel-dump-project/
+
+          # Down Docker
+          docker compose down
+          
+          # ! Нужно только если идёт деплой на отдельную ветку
+          # Обновляем код и переключаемся на ветку deploy
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git pull origin master
+          git checkout deploy
+          git rebase master
+          git push https://${{ secrets.TOKEN }}@github.com/misha366/laravel-dump-project.git deploy --force
+      
+          # Start containers
+          docker compose up -d --build
+      
+          # Install PHP dependencies
+          docker compose run --rm composer install --no-dev --optimize-autoloader
+      
+          # Run migrations
+          docker compose run --rm artisan migrate --force
+      
+          # Cache configuration
+          docker compose run --rm artisan config:clear
+          docker compose run --rm artisan config:cache
+          docker compose run --rm artisan route:cache
+          docker compose run --rm artisan event:cache
+          docker compose run --rm artisan view:cache
+      
+          # Install JS dependencies & build assets
+          docker compose exec php sh -c "npm i && npm run build"
+      
+          '
