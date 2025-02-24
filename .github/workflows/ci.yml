@@ -26,6 +26,7 @@ jobs:
           DB_DATABASE=test_database
           DB_USERNAME=root
           DB_PASSWORD=test_password
+          EOF
 
       - name: Create test mysql.env file for docker compose
         run: |
@@ -36,6 +37,7 @@ jobs:
           MYSQL_DATABASE=test_database
           MYSQL_PASSWORD=test_password
           MYSQL_ROOT_PASSWORD=test_password
+          EOF
 
       - name: Create test nginx.conf file for docker compose
         run: |
@@ -59,19 +61,12 @@ jobs:
                   fastcgi_param PATH_INFO $fastcgi_path_info;
               }
           }
+          EOF
 
-
-      - name: Build docker
-        run: docker compose build
-
-      - name: Up Docker
-        run: docker compose up nginx -d
-
-      - name: Install composer dependencies
-        run: docker compose run --rm composer install --no-dev --optimize-autoloader
-
-      - name: Run migrations
-        run: docker compose run --rm artisan migrate --force
-
-      - name: Run tests
-        run: docker compose run --rm artisan test
+      - name: Raise the application & run tests
+        run: | 
+          docker compose build
+          docker compose up nginx -d
+          docker compose run --rm composer install --no-dev --optimize-autoloader
+          docker compose run --rm artisan migrate --force
+          docker compose run --rm artisan test
