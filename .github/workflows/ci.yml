@@ -63,10 +63,40 @@ jobs:
           }
           EOF
 
-      - name: Raise the application & run tests
-        run: | 
-          docker compose build
-          docker compose up nginx -d
-          docker compose run --rm composer install --no-dev --optimize-autoloader
-          docker compose run --rm artisan migrate --force
-          docker compose run --rm artisan test
+
+      - name: Build docker
+        run: docker compose build
+
+      - name: Up Docker
+        run: docker compose up nginx -d
+
+      - name: Install composer dependencies
+        run: docker compose run --rm composer install --no-dev --optimize-autoloader
+
+        # TEMP
+      - name: debug Test MySQL connection
+        run: docker compose run --rm artisan mysql -h mysql -uroot -ptest_password -e "SHOW DATABASES;"
+
+        # TEMP
+      - name: debug Check MySQL logs
+        run: docker compose logs mysql
+
+        # TEMP
+      - name: debug Wait for MySQL
+        run: |
+          echo "Waiting for MySQL to be ready..."
+          for i in {1..30}; do
+            if docker compose exec -T mysql mysqladmin ping -h"mysql" --silent; then
+              echo "MySQL is up and running"
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+
+      - name: Run migrations
+        run: docker compose run --rm artisan migrate --force
+
+      - name: Run tests
+        run: docker compose run --rm artisan test
