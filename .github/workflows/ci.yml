@@ -1,0 +1,22 @@
+name: CI laravel
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build docker
+        run: docker compose build
+
+      - name: Run migrations
+        run: docker compose run --rm artisan migrate --force
+
+      - name: Run tests
+        run: docker compose run --rm artisan test
