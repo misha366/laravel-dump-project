@@ -1,0 +1,86 @@
+name: CI laravel
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create test .env file
+        run: |
+          cat <<EOF > src/.env
+          APP_ENV=local
+          APP_DEBUG=true
+          APP_KEY=base64:$(openssl rand -base64 32)
+          APP_URL=http://localhost
+
+          DB_CONNECTION=mysql
+          DB_HOST=mysql
+          DB_PORT=3306
+          DB_DATABASE=test_database
+          DB_USERNAME=root
+          DB_PASSWORD=test_password
+          EOF
+
+      - name: Create test mysql.env file for docker compose
+        run: |
+          cat <<EOF > env/mysql.env
+          MYSQL_CONNECTION=mysql
+          MYSQL_HOST=mysql
+          MYSQL_PORT=3306
+          MYSQL_DATABASE=test_database
+          MYSQL_ROOT_PASSWORD=test_password
+          EOF
+
+      - name: Create test nginx.conf file for docker compose
+        run: |
+          cat <<EOF > nginx/nginx.conf
+          server {
+              listen 80;
+              index index.php index.html;
+              server_name localhost;
+              root /var/www/laravel/public;
+              location / {
+                  try_files $uri $uri/ /index.php?$query_string;
+              }
+
+              location ~ \.php$ {
+                  try_files $uri =404;
+                  fastcgi_split_path_info ^(.+\.php)(/.+);
+                  fastcgi_pass php:9000;
+                  fastcgi_index index.php;
+                  include fastcgi_params;
+                  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                  fastcgi_param PATH_INFO $fastcgi_path_info;
+              }
+          }
+          EOF
+
+      - name: Build docker
+        run: docker compose build
+
+      - name: Up Docker
+        run: docker compose up nginx -d
+
+      - name: Install composer dependencies
+        run: docker compose run --rm composer install --optimize-autoloader
+
+      - name: Ensure MySQL is ready
+        run: |
+          echo "Waiting for MySQL to be fully initialized..."
+          sleep 10
+
+      - name: Run migrations
+        run: docker compose run --rm artisan migrate --force
+
+      - name: Build frontend assets
+        run: docker compose run --rm php sh -c "npm i && npm run build"
+
+      - name: Run tests
+        run: docker compose run --rm artisan test
