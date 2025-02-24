@@ -12,9 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create .env.testing file
+      - name: Create test .env file
         run: |
-          cat <<EOF > src/.env.testing
+          cat <<EOF > src/.env
           APP_ENV=testing
           APP_DEBUG=true
           APP_KEY=base64:$(openssl rand -base64 32)
