@@ -70,7 +70,7 @@ jobs:
         run: docker compose run --rm composer install --no-dev --optimize-autoloader
 
       - name: Run migrations
-        run: docker compose run --rm artisan migrate --force --env=testing
+        run: docker compose run --rm artisan migrate --force
 
       - name: Run tests
-        run: docker compose run --rm artisan test --env=testing
+        run: docker compose run --rm artisan test
