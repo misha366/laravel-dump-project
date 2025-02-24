@@ -23,7 +23,7 @@ jobs:
           DB_HOST=mysql
           DB_PORT=3306
           DB_DATABASE=test_database
-          DB_USERNAME=test_password
+          DB_USERNAME=root
           DB_PASSWORD=test_password
 
       - name: Create test mysql.env file for docker compose
