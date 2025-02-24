@@ -15,9 +15,10 @@ jobs:
       - name: Create test .env file
         run: |
           cat <<EOF > src/.env
-          APP_ENV=testing
+          APP_ENV=local
           APP_DEBUG=true
           APP_KEY=base64:$(openssl rand -base64 32)
+          APP_URL=http://localhost
 
           DB_CONNECTION=mysql
           DB_HOST=mysql
