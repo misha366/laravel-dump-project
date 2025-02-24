@@ -75,7 +75,7 @@ jobs:
 
         # TEMP
       - name: debug Test MySQL connection
-        run: docker compose run --rm artisan mysql -h mysql -uroot -ptest_password -e "SHOW DATABASES;"
+        run: docker compose exec php sh -c "mariadb -h mysql -uroot -ptest_password -e 'SHOW DATABASES;' --skip-ssl"
 
         # TEMP
       - name: debug Check MySQL logs
