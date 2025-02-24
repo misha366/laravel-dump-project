@@ -74,14 +74,10 @@ jobs:
         run: docker compose run --rm composer install --no-dev --optimize-autoloader
 
         # TEMP
-      - name: debug Test MySQL connection
-        run: docker compose exec php sh -c "mariadb -h mysql -uroot -ptest_password -e 'SHOW DATABASES;' --skip-ssl"
-
-        # TEMP
       - name: debug Check MySQL logs
         run: docker compose logs mysql
 
-        # TEMP
+      # TEMP
       - name: debug Wait for MySQL
         run: |
           echo "Waiting for MySQL to be ready..."
@@ -94,6 +90,9 @@ jobs:
             sleep 2
           done
 
+        # TEMP
+      - name: debug Test MySQL connection
+        run: docker compose exec php sh -c "mariadb -h mysql -uroot -ptest_password -e 'SHOW DATABASES;' --skip-ssl"
 
       - name: Run migrations
         run: docker compose run --rm artisan migrate --force
