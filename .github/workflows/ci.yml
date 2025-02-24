@@ -12,6 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Create test mysql.env file for docker compose
+        run: |
+          cat <<EOF > env/mysql.env
+          MYSQL_CONNECTION=mysql
+          MYSQL_HOST=mysql
+          MYSQL_PORT=3306
+          MYSQL_DATABASE=test_database
+          MYSQL_PASSWORD=test_password
+          MYSQL_ROOT_PASSWORD=test_password
+
       - name: Build docker
         run: docker compose build
 
