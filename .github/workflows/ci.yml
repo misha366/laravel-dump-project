@@ -80,7 +80,7 @@ jobs:
         run: docker compose run --rm artisan migrate --force
 
       - name: Build frontend assets
-        run: docker compose exec php sh -c "npm i && npm run build"
+        run: docker compose run --rm php sh -c "npm i && npm run build"
 
       - name: Run tests
         run: docker compose run --rm artisan test
