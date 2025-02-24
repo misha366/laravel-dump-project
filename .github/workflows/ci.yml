@@ -35,7 +35,6 @@ jobs:
           MYSQL_HOST=mysql
           MYSQL_PORT=3306
           MYSQL_DATABASE=test_database
-          MYSQL_PASSWORD=test_password
           MYSQL_ROOT_PASSWORD=test_password
           EOF
 
@@ -63,7 +62,6 @@ jobs:
           }
           EOF
 
-
       - name: Build docker
         run: docker compose build
 
@@ -71,28 +69,12 @@ jobs:
         run: docker compose up nginx -d
 
       - name: Install composer dependencies
-        run: docker compose run --rm composer install --no-dev --optimize-autoloader
+        run: docker compose run --rm composer install --optimize-autoloader
 
-        # TEMP
-      - name: debug Check MySQL logs
-        run: docker compose logs mysql
-
-      # TEMP
-      - name: debug Wait for MySQL
+      - name: Ensure MySQL is ready
         run: |
-          echo "Waiting for MySQL to be ready..."
-          for i in {1..30}; do
-            if docker compose exec -T mysql mysqladmin ping -h"mysql" --silent; then
-              echo "MySQL is up and running"
-              break
-            fi
-            echo "Waiting for MySQL..."
-            sleep 2
-          done
-
-        # TEMP
-      - name: debug Test MySQL connection
-        run: docker compose exec php sh -c "mariadb -h mysql -uroot -ptest_password -e 'SHOW DATABASES;' --skip-ssl"
+          echo "Waiting for MySQL to be fully initialized..."
+          sleep 10
 
       - name: Run migrations
         run: docker compose run --rm artisan migrate --force
