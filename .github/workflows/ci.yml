@@ -37,10 +37,10 @@ jobs:
           MYSQL_ROOT_PASSWORD=test_password
 
       - name: Build docker
-        run: docker compose build --env=testing
+        run: docker compose build
 
       - name: Install composer dependencies
-        run: docker compose run --rm composer install --no-dev --optimize-autoloader --env=testing
+        run: docker compose run --rm composer install --no-dev --optimize-autoloader
 
       - name: Run migrations
         run: docker compose run --rm artisan migrate --force --env=testing
