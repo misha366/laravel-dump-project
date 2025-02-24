@@ -36,8 +36,35 @@ jobs:
           MYSQL_PASSWORD=test_password
           MYSQL_ROOT_PASSWORD=test_password
 
+      - name: Create test nginx.conf file for docker compose
+        run: |
+          cat <<EOF > nginx/nginx.conf
+          server {
+              listen 80;
+              index index.php index.html;
+              server_name localhost;
+              root /var/www/laravel/public;
+              location / {
+                  try_files $uri $uri/ /index.php?$query_string;
+              }
+
+              location ~ \.php$ {
+                  try_files $uri =404;
+                  fastcgi_split_path_info ^(.+\.php)(/.+);
+                  fastcgi_pass php:9000;
+                  fastcgi_index index.php;
+                  include fastcgi_params;
+                  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                  fastcgi_param PATH_INFO $fastcgi_path_info;
+              }
+          }
+
+
       - name: Build docker
         run: docker compose build
+
+      - name: Up Docker
+        run: docker compose up nginx -d
 
       - name: Install composer dependencies
         run: docker compose run --rm composer install --no-dev --optimize-autoloader
