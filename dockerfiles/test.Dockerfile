@@ -3,7 +3,7 @@ WORKDIR /var/www/laravel
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-RUN apk --no-cache add g++ autoconf linux-headers make
+RUN apk --no-cache add g++ autoconf linux-headers make nodejs npm
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
