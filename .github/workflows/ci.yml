@@ -18,6 +18,9 @@ jobs:
       - name: Install composer dependencies
         run: docker compose -f docker-compose.ci.yml run --rm composer install --optimize-autoloader
 
+      - name: Install frontend dependencies
+        run: docker compose -f docker-compose.ci.yml run --rm test sh -c "npm i"
+
       - name: Build frontend
         run: docker compose -f docker-compose.ci.yml run --rm test sh -c "npm run build"
 
