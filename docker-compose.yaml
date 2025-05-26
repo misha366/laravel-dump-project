@@ -11,8 +11,8 @@ services:
       - php
   php:
     build:
-      context: dockerfiles
-      dockerfile: php.Dockerfile
+      context: .
+      dockerfile: dockerfiles/php.Dockerfile
     volumes:
       - ./src:/var/www/laravel
     ports:
@@ -28,15 +28,15 @@ services:
 
   composer:
     build:
-      context: dockerfiles
-      dockerfile: composer.Dockerfile
+      context: .
+      dockerfile: dockerfiles/composer.Dockerfile
     volumes:
       - ./src:/var/www/laravel
   
   artisan:
     build:
-      context: dockerfiles
-      dockerfile: php.Dockerfile
+      context: .
+      dockerfile: dockerfiles/php.Dockerfile
     volumes:
       - ./src:/var/www/laravel
     entrypoint: ["php", "/var/www/laravel/artisan"]
