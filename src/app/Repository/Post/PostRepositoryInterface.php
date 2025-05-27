@@ -2,7 +2,6 @@
 
 namespace App\Repository\Post;
 
-use App\DTO\PostDTO;
 use App\Models\Post;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -11,7 +10,7 @@ interface PostRepositoryInterface {
         ?bool $isPublished,
         ?int $categoryId
     ): LengthAwarePaginator;
-    public function store(array $postDTO): Post;
-    public function update(PostDTO $postDTO, Post $post): Post;
+    public function store(array $postArrayData): Post;
+    public function update(array $postArrayData, Post $post): Post;
     public function destroy(Post $post): void;
 }

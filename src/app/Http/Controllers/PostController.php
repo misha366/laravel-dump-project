@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\PostDTO;
 use App\Http\Requests\Post\IndexRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Requests\Post\UpdateRequest;
@@ -15,19 +14,11 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    private PostService $postService;
-    private CategoryService $categoryService;
-    private TagService $tagService;
-
     public function __construct(
-        PostService $postService,
-        CategoryService $categoryService,
-        TagService $tagService
-    ) {
-        $this->postService = $postService;
-        $this->categoryService = $categoryService;
-        $this->tagService = $tagService;
-    }
+        private PostService $postService,
+        private CategoryService $categoryService,
+        private TagService $tagService
+    ) {}
 
     public function index(IndexRequest $request): View
     {
@@ -86,8 +77,7 @@ class PostController extends Controller
 
     public function update(UpdateRequest $request, Post $post): RedirectResponse
     {
-        $postDTO = PostDTO::fromArray($request->validated());
-        $this->postService->update($postDTO, $post);
+        $this->postService->update($request->validated(), $post);
 
         return redirect()->route('posts.show', [
             'post' => $post->id
