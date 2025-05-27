@@ -24,19 +24,12 @@ class PostRepository implements PostRepositoryInterface {
 
         return $query->paginate(10);
     }
-    public function store(PostDTO $postDTO): Post {
-        try {
-            return DB::transaction(function() use ($postDTO) {
-                $post = Post::create(PostDTO::toArray($postDTO));
-                if (!empty($postDTO->getTagIds())) {
-                    $post->tags()->sync($postDTO->getTagIds());
-                }
-                return $post;
-            });
-        } catch (Throwable $e) {
-            $this->logPostError('FROM REPO: Transaction failed when storing a post.', $e);
-            throw new PostStoreException('Failed to store the post, Transaction rolled back', 0, $e);
+    public function store(array $postArrayData): Post {
+        $post = Post::create($postArrayData);
+        if (!empty($postArrayData['tag_ids'])) {
+            $post->tags()->sync($postArrayData['tag_ids']);
         }
+        return $post;
     }
     public function update(PostDTO $postDTO, Post $post): Post {
         try {

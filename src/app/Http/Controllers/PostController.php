@@ -58,8 +58,7 @@ class PostController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $postDTO = PostDTO::fromArray($request->validated());
-        $post = $this->postService->store($postDTO);
+        $post = $this->postService->store($request->validated());
 
         return redirect()->route('posts.show', [
             'post' => $post

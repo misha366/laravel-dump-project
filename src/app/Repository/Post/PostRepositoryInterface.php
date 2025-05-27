@@ -11,7 +11,7 @@ interface PostRepositoryInterface {
         ?bool $isPublished,
         ?int $categoryId
     ): LengthAwarePaginator;
-    public function store(PostDTO $postDTO): Post;
+    public function store(array $postDTO): Post;
     public function update(PostDTO $postDTO, Post $post): Post;
     public function destroy(Post $post): void;
 }
