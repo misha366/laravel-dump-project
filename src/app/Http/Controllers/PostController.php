@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Post\IndexRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Requests\Post\UpdateRequest;
+use App\Models\Category;
+use App\Models\Tag;
 use App\Models\Post;
-use App\Services\CategoryService;
 use App\Services\PostService;
-use App\Services\TagService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -16,8 +16,6 @@ class PostController extends Controller
 {
     public function __construct(
         private PostService $postService,
-        private CategoryService $categoryService,
-        private TagService $tagService
     ) {}
 
     public function index(IndexRequest $request): View
@@ -28,7 +26,7 @@ class PostController extends Controller
             $params['is_published'] ?? null,
             $params['category_id'] ?? null
         );
-        $categories = $this->categoryService->getCategories();
+        $categories = Category::all();
 
         return view('post/index', [
             'posts' => $posts,
@@ -38,8 +36,8 @@ class PostController extends Controller
 
     public function create(): View
     {
-        $categories = $this->categoryService->getCategories();
-        $tags = $this->tagService->getTags();
+        $categories = Category::all();
+        $tags = Tag::all();
 
         return view('post/create', [
             'categories' => $categories,
@@ -65,8 +63,8 @@ class PostController extends Controller
 
     public function edit(Post $post): View
     {
-        $categories = $this->categoryService->getCategories();
-        $tags = $this->tagService->getTags();
+        $categories = Category::all();
+        $tags = Tag::all();
 
         return view('post/edit', [
             'post' => $post,
