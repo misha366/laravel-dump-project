@@ -18,4 +18,8 @@ class Tag extends Model
             'post_id'
         );
     }
+
+    protected $fillable = [
+        'title',
+    ];
 }
