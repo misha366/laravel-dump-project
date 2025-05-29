@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->name("mainpage");
+})->name('mainpage');
 
 Route::get('/about', function () {
     return view('about');
-})->name("about");
+})->name('about');
 
 Route::resource('posts', PostController::class);
 

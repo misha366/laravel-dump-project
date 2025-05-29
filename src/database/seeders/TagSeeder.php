@@ -13,7 +13,7 @@ class TagSeeder extends Seeder
         $faker = Faker::create();
         for ($i = 0; $i < 40; $i++) {
             Tag::create([
-                'title' => $faker->word . $faker->emoji()
+                'title' => $faker->word.$faker->emoji(),
             ]);
         }
     }

@@ -19,7 +19,7 @@ class PostSeeder extends Seeder
                 'title' => $faker->sentence,
                 'content' => $faker->paragraph,
                 'image' => $faker->imageUrl,
-                'category_id' => $faker->numberBetween($min = 1, $max = 20)
+                'category_id' => $faker->numberBetween($min = 1, $max = 20),
             ]);
 
             $randomTags = $faker->randomELements($tagIds, $faker->numberBetween($min = 1, $max = 5));
