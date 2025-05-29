@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Post\IndexRequest;
-use App\Http\Requests\Post\StoreRequest;
 use App\Http\Requests\Post\UpdateRequest;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -18,14 +18,9 @@ class PostController extends Controller
         private PostService $postService,
     ) {}
 
-    public function index(IndexRequest $request): View
+    public function index(Request $request): View
     {
-        $params = $request->validated();
-
-        $posts = $this->postService->getPaginatedAndFilteredPosts(
-            $params['is_published'] ?? null,
-            $params['category_id'] ?? null
-        );
+        $posts = $this->postService->getPaginatedAndFilteredPosts($request->all());
         $categories = Category::all();
 
         return view('post/index', [
@@ -45,9 +40,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $post = $this->postService->store($request->validated());
+        $post = $this->postService->store($request->all());
 
         return redirect()->route('posts.show', [
             'post' => $post
@@ -73,9 +68,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(UpdateRequest $request, Post $post): RedirectResponse
+    public function update(Request $request, Post $post): RedirectResponse
     {
-        $this->postService->update($request->validated(), $post);
+        $this->postService->update($request->all(), $post);
 
         return redirect()->route('posts.show', [
             'post' => $post->id

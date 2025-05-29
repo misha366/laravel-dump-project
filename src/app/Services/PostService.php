@@ -5,18 +5,48 @@ namespace App\Services;
 use App\Models\Post;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PostService {
-    public function getPaginatedAndFilteredPosts(?bool $isPublished, ?int $categoryId): LengthAwarePaginator {
+    public function getPaginatedAndFilteredPosts(array $postArrayData): LengthAwarePaginator {
+        $validator = Validator::make($postArrayData, [
+            'is_published' => 'nullable|boolean',
+            'category_id' => 'nullable|integer|exists:categories,id'
+        ]);
+        
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $validated = $validator->validated();
+
         $query = Post::query();
 
-        if (!is_null($isPublished)) $query->where('is_published', $isPublished);
-        if (!is_null($categoryId)) $query->where('category_id', $categoryId);
+        if (array_key_exists('is_published', $validated))
+            $query->where('is_published', $validated['is_published']);
+
+        if (array_key_exists('category_id', $validated))
+            $query->where('category_id', $validated['category_id']);
 
         return $query->paginate(10);
     }
 
     public function store(array $postArrayData) : Post {
+
+        $validator = Validator::make($postArrayData, [
+            'title' => 'required|string|max:225',
+            'content' => 'required|string',
+            'image' => 'nullable|string',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'tag_ids' => 'nullable|array|max:1000',
+            'tag_ids.*' => 'integer|exists:tags,id'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
         try {
             return DB::transaction(function() use ($postArrayData) {
                 $post = Post::create($postArrayData);
@@ -31,6 +61,20 @@ class PostService {
     }
 
     public function update(array $postArrayData, Post $post) {
+
+        $validator = Validator::make($postArrayData, [
+            'title' => 'required|string|max:225',
+            'content' => 'required|string',
+            'image' => 'nullable|string',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'tag_ids' => 'nullable|array|max:1000',
+            'tag_ids.*' => 'integer|exists:tags,id'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
         try {
             return DB::transaction(function() use ($postArrayData, $post) {
                 $post->update($postArrayData);
