@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class PostService {
-    public function getPaginatedAndFilteredPosts(array $postArrayData): LengthAwarePaginator {
+class PostService
+{
+    public function getPaginatedAndFilteredPosts(array $postArrayData): LengthAwarePaginator
+    {
         $validator = Validator::make($postArrayData, [
             'is_published' => 'nullable|boolean',
-            'category_id' => 'nullable|integer|exists:categories,id'
+            'category_id' => 'nullable|integer|exists:categories,id',
         ]);
-        
+
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
@@ -23,16 +25,19 @@ class PostService {
 
         $query = Post::query();
 
-        if (array_key_exists('is_published', $validated))
+        if (array_key_exists('is_published', $validated)) {
             $query->where('is_published', $validated['is_published']);
+        }
 
-        if (array_key_exists('category_id', $validated))
+        if (array_key_exists('category_id', $validated)) {
             $query->where('category_id', $validated['category_id']);
+        }
 
         return $query->paginate(10);
     }
 
-    public function store(array $postArrayData) : Post {
+    public function store(array $postArrayData): Post
+    {
 
         $validator = Validator::make($postArrayData, [
             'title' => 'required|string|max:225',
@@ -40,7 +45,7 @@ class PostService {
             'image' => 'nullable|string',
             'category_id' => 'nullable|integer|exists:categories,id',
             'tag_ids' => 'nullable|array|max:1000',
-            'tag_ids.*' => 'integer|exists:tags,id'
+            'tag_ids.*' => 'integer|exists:tags,id',
         ]);
 
         if ($validator->fails()) {
@@ -48,11 +53,12 @@ class PostService {
         }
 
         try {
-            return DB::transaction(function() use ($postArrayData) {
+            return DB::transaction(function () use ($postArrayData) {
                 $post = Post::create($postArrayData);
-                if (!empty($postArrayData['tag_ids'])) {
+                if (! empty($postArrayData['tag_ids'])) {
                     $post->tags()->sync($postArrayData['tag_ids']);
                 }
+
                 return $post;
             });
         } catch (Throwable $e) {
@@ -60,7 +66,8 @@ class PostService {
         }
     }
 
-    public function update(array $postArrayData, Post $post) {
+    public function update(array $postArrayData, Post $post)
+    {
 
         $validator = Validator::make($postArrayData, [
             'title' => 'required|string|max:225',
@@ -68,7 +75,7 @@ class PostService {
             'image' => 'nullable|string',
             'category_id' => 'nullable|integer|exists:categories,id',
             'tag_ids' => 'nullable|array|max:1000',
-            'tag_ids.*' => 'integer|exists:tags,id'
+            'tag_ids.*' => 'integer|exists:tags,id',
         ]);
 
         if ($validator->fails()) {
@@ -76,13 +83,14 @@ class PostService {
         }
 
         try {
-            return DB::transaction(function() use ($postArrayData, $post) {
+            return DB::transaction(function () use ($postArrayData, $post) {
                 $post->update($postArrayData);
-                if (!empty($postArrayData['tag_ids'])) {
+                if (! empty($postArrayData['tag_ids'])) {
                     $post->tags()->sync($postArrayData['tag_ids']);
                 } else {
                     $post->tags()->detach();
                 }
+
                 return $post;
             });
         } catch (Throwable $e) {
@@ -90,7 +98,8 @@ class PostService {
         }
     }
 
-    public function destroy(Post $post): void {
+    public function destroy(Post $post): void
+    {
         try {
             DB::transaction(function () use ($post) {
                 $post->delete();
@@ -98,7 +107,6 @@ class PostService {
         } catch (Throwable $e) {
             throw new Exception('Failed to destroy the post, Transaction rolled back', 0, $e);
         }
-        
-    }
 
+    }
 }

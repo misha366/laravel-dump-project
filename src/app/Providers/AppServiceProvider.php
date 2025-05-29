@@ -21,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // after php artisan vendor:publish --tag=laravel-pagination
-        Paginator::defaultView("vendor.pagination.bootstrap-5");
+        Paginator::defaultView('vendor.pagination.bootstrap-5');
     }
 }

@@ -30,7 +30,7 @@ class AuthController extends Controller
     {
         return view('auth/reset-password');
     }
-    
+
     public function twoFactorChallenge(): View
     {
         return view('auth/two-factor-challenge');

@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Post\IndexRequest;
-use App\Http\Requests\Post\UpdateRequest;
 use App\Models\Category;
-use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Services\PostService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,7 +23,7 @@ class PostController extends Controller
 
         return view('post/index', [
             'posts' => $posts,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -36,7 +34,7 @@ class PostController extends Controller
 
         return view('post/create', [
             'categories' => $categories,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
@@ -45,14 +43,14 @@ class PostController extends Controller
         $post = $this->postService->store($request->all());
 
         return redirect()->route('posts.show', [
-            'post' => $post
+            'post' => $post,
         ]);
     }
 
     public function show(Post $post): View
     {
         return view('post/show', [
-            'post' => $post
+            'post' => $post,
         ]);
     }
 
@@ -64,7 +62,7 @@ class PostController extends Controller
         return view('post/edit', [
             'post' => $post,
             'categories' => $categories,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
@@ -73,13 +71,14 @@ class PostController extends Controller
         $this->postService->update($request->all(), $post);
 
         return redirect()->route('posts.show', [
-            'post' => $post->id
+            'post' => $post->id,
         ]);
     }
 
     public function destroy(Post $post): RedirectResponse
     {
         $this->postService->destroy($post);
+
         return redirect()->route('posts.index');
     }
 }

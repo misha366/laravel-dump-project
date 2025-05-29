@@ -13,7 +13,7 @@ class CategorySeeder extends Seeder
         $faker = Faker::create();
         for ($i = 0; $i < 20; $i++) {
             Category::create([
-                'title' => $faker->word
+                'title' => $faker->word,
             ]);
         }
     }
