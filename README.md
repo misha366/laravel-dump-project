@@ -31,7 +31,7 @@ server: {
 
 9. `docker compose run --rm front.npm i` + `docker compose up front.run`
 
-10. Open `http://127.0.0.1:8000/` & **enjoy the application**
+10. Open `http://127.0.0.1/` & **enjoy the application**
 
 ### Routes
 
