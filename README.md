@@ -2,31 +2,14 @@
 
 Dump Laravel project with implemented CRUD and ui, on which you can test different technologies
 
-### How to strat locally?
+### How to strat locally in dev mode?
 1. Clone the repository `> git clone https://github.com/misha366/laravel-dump-project`
 
-2. Create & fill `env/mysql.env`, `nginx.conf` & `src/.env` files 
-<details>
-  <summary>Important part of nginx.conf for vite dev server</summary>     
-    server {
-      ...
-
-        # FOR VITE SERVER
-        location /_vite/ {
-            proxy_pass http://php:5173;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "Upgrade";
-        }
-      ...
-    }
-</details>
+2. Create & fill `env/mysql.env`, `nginx.conf` & `src/.env` (be sure to add the value `VITE_DEV_SERVER_URL=http://front.run:5173`) files 
 
 3. Build containers `> docker compose build`
 
-4. Up containers `> docker compose up nginx -d`
+4. Up containers `> docker compose up nginx -d` + `docker compose run --rm artisan key:generate`
 
 5. Install composer dependencies `> docker compose run --rm composer install --optimize-autoloader`
 
@@ -34,9 +17,21 @@ Dump Laravel project with implemented CRUD and ui, on which you can test differe
 
 7. Run seeders `> docker compose run --rm artisan db:seed`
 
-8. Open new console & run vite dev server `> docker compose exec php sh -c "npm run dev"`
+8. In `vite.config.js` add:
+```js
+server: {
+    host: '0.0.0.0',
+    port: 5173,
+    hmr: {
+        host: 'localhost',
+        port: 5173,
+    },
+},
+```
 
-9. Open `http://127.0.0.1:8000/` & enjoy the application
+9. `docker compose run --rm front.npm i` + `docker compose up front.run`
+
+10. Open `http://127.0.0.1:8000/` & **enjoy the application**
 
 ### Routes
 
@@ -45,6 +40,15 @@ Dump Laravel project with implemented CRUD and ui, on which you can test differe
 
 #### **About**
 - `GET /about` → **about**  
+
+#### **Posts**
+- `GET /posts` → **PostController@index**  
+- `POST /posts` → **PostController@store**  
+- `GET /posts/create` → **PostController@create**  
+- `GET /posts/{post}` → **PostController@show**  
+- `PUT|PATCH /posts/{post}` → **PostController@update**  
+- `DELETE /posts/{post}` → **PostController@destroy**  
+- `GET /posts/{post}/edit` → **PostController@edit**  
 
 #### **Authentication**
 - `GET /auth/login` → **AuthController@login**  
@@ -55,15 +59,6 @@ Dump Laravel project with implemented CRUD and ui, on which you can test differe
 - `GET /auth/confirm-password` → **AuthController@confirmPassword**  
 - `GET /auth/verify-email` → **AuthController@verifyEmail**  
 - `GET /auth/two-factor-challenge` → **AuthController@twoFactorChallenge**  
-
-#### **Posts**
-- `GET /posts` → **PostController@index**  
-- `POST /posts` → **PostController@store**  
-- `GET /posts/create` → **PostController@create**  
-- `GET /posts/{post}` → **PostController@show**  
-- `PUT|PATCH /posts/{post}` → **PostController@update**  
-- `DELETE /posts/{post}` → **PostController@destroy**  
-- `GET /posts/{post}/edit` → **PostController@edit**  
 
 ### Technologies
 
@@ -129,4 +124,4 @@ Tag {
 ```
 
 
-<i><small>If you have any problems with the launch or you see a controversial point in the code, you can always open an issue or write to me at misha.moskalenko.jv@gmail.com</small><i>
+<i><small>If you have any problems with the launch or you see a controversial point in the code, you can always open an issue or write to me at misham.php@gmail.com</small><i>
