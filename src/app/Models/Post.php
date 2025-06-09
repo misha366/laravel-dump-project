@@ -11,11 +11,13 @@ class Post extends Model
 {
     use HasFactory;
 
-    public function category(): BelongsTo {
+    public function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function tags(): BelongsToMany {
+    public function tags(): BelongsToMany
+    {
         return $this->belongsToMany(
             Tag::class,
             'post_tags',
@@ -28,6 +30,6 @@ class Post extends Model
         'title',
         'content',
         'image',
-        'category_id'
+        'category_id',
     ];
 }
